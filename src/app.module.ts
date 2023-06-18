@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConsoleModule } from './console/console.module';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-import { VendorModule } from './vendor/vendor.module';
-import { ClientModule } from './client/client.module';
+import { PermissionsGuard } from './auth/guards/Permission.guard';
+import { RolesGuard } from './auth/guards/Role.guard';
+import { PermissionsModule } from './permissions/permissions.prisma.module';
+import { RolesModule } from './roles/roles.prisma.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [ConsoleModule, AuthModule, VendorModule, ClientModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [AuthModule, UsersModule, RolesModule, PermissionsModule],
+  controllers: [],
+  providers: [
+    { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_GUARD, useClass: PermissionsGuard },
+  ],
 })
 export class AppModule {}
