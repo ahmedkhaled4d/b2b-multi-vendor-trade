@@ -12,14 +12,13 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t multi-tenant-architecture-nestjs .
+      - docker tag multi-tenant-architecture-nestjs:latest 929301630441.dkr.ecr.us-east-1.amazonaws.com/multi-tenant-architecture-nestjs:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push 929301630441.dkr.ecr.us-east-1.amazonaws.com/multi-tenant-architecture-nestjs:latest
       - echo Writing image definitions file...
       - printf '[{"name":"multi-tenant-architecture","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:

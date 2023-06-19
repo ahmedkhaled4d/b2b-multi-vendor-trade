@@ -62,12 +62,12 @@ export class AuthService {
 
   private async deleteOldPasswordResets() {
     await this.prisma
-      .$queryRaw`DELETE FROM "public"."ResetPasswordEmail" WHERE "createdAt" < now() - interval '20 minutes';`;
+      .$queryRaw`DELETE FROM "multi-tenant-architecture"."ResetPasswordEmail" WHERE "createdAt" < now() - interval '20 minutes';`;
   }
 
   async deletePasswordResetForUser(userEmail: string) {
     await this.prisma
-      .$queryRaw`DELETE FROM "public"."ResetPasswordEmail" WHERE email = ${userEmail};`;
+      .$queryRaw`DELETE FROM "multi-tenant-architecture"."ResetPasswordEmail" WHERE email = ${userEmail};`;
     this.sendPasswordWasResetEmail(userEmail);
   }
 

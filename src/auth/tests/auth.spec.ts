@@ -73,13 +73,13 @@ async function createUser(
 async function clearDatabaseData(prisma: PrismaService) {
   const tablenames = await prisma.$queryRaw<
     Array<{ tablename: string }>
-  >`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
+  >`SELECT tablename FROM pg_tables WHERE schemaname='multi-tenant-architecture'`;
 
   const blackList = ['_prisma_migrations', 'Permissions', 'Roles'];
   const tables = tablenames
     .map(({ tablename }) => tablename)
     .filter((name) => !blackList.includes(name))
-    .map((name) => `"public"."${name}"`)
+    .map((name) => `"multi-tenant-architecture"."${name}"`)
     .join(', ');
 
   try {
