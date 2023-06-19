@@ -4,8 +4,8 @@ WORKDIR /api-server
 
 COPY . .
 
-RUN npm ci
-RUN npm run build
+RUN yarn
+RUN yarn build
 RUN npx prisma generate
 
 ENV SERVER_PORT=80
