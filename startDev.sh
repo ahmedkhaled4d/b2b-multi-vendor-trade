@@ -19,7 +19,7 @@ while [ $TESTREADY -ne 0 ]
 do
     echo -n "."
     sleep 1
-    docker exec nestrest2postgres pg_isready
+    docker exec multi-tenant-architecture pg_isready
     TESTREADY=$?
 done
 
