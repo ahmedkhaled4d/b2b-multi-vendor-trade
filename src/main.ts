@@ -13,11 +13,9 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import { PrismaClient } from '@prisma/client';
-import helmet from 'helmet';
 import { Role } from './auth/enums/roles.enum';
 import { Permission } from './auth/enums/permissions.enum';
 import * as argon2 from 'argon2';
-import { randomBytes } from 'crypto';
 import { sendEmail } from './lib/sendgrid';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -95,7 +93,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('NestRest 2.0 API')
+    .setTitle('multi-tenant-architecture 2.0 API')
     .setDescription('')
     .setVersion('')
     .addBearerAuth()
@@ -139,7 +137,8 @@ async function checkForSuperAdmin(prismaService: PrismaService) {
   if (users.length > 0) return true; // a superAdmin exists!
 
   // init a superAdmin if none exists
-  const adminEmail = process.env.SEND_ADMIN_EMAIL || 'nestrest2@admin.com';
+  const adminEmail =
+    process.env.SEND_ADMIN_EMAIL || 'multi-tenant-architecture2@admin.com';
   const newPW = 'mysecretpassword'; // randomBytes(32).toString('base64');
   const newHash = await argon2.hash(newPW);
   await prismaService.users.create({
@@ -158,7 +157,7 @@ async function checkForSuperAdmin(prismaService: PrismaService) {
     console.log('====SENDING ADMIN EMAIL=====');
     const resp = await sendEmail({
       to: process.env.SEND_ADMIN_EMAIL,
-      subject: 'NestRest 2 API Message',
+      subject: 'multi-tenant-architecture 2 API Message',
       text: `Super Admin CREATED! \n { "email": "${adminEmail}", "password": "${newPW}" }`,
     }).catch((err) => [err]);
     console.log(resp[0].statusCode);
